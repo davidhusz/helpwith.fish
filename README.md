@@ -28,3 +28,11 @@ And if, like me, you feel like typing eight letters to call this function is
 simply asking too much:
 
 	echo 'abbr --add h helpwith' >> ~/.config/fish/config.fish
+
+## Uninstallation
+
+	rm ~/.config/fish/functions/helpwith.fish
+	test -d ~/.cache/helpwith.fish && rm -r ~/.cache/helpwith.fish
+
+The command summaries at the beginning of man pages are cached, hence the cache
+directory.
