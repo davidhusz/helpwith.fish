@@ -1,5 +1,5 @@
-function help --description 'Display help for any kind of command'
-	argparse -n help d/definition no-alias -- $argv
+function helpwith --description 'Display help for any kind of command'
+	argparse -n helpwith d/definition no-alias -- $argv
 	set cmd $argv[1]
 	set -q _flag_no_alias && set onlyfiles -f
 	set type (type -t $onlyfiles $cmd 2> /dev/null)
@@ -40,7 +40,7 @@ function help --description 'Display help for any kind of command'
 					if string match -qr "^.$cmd" $def \
 							&& show "help for wrapped command '$cmd'"
 						echo ---
-						help --no-alias $cmd
+						helpwith --no-alias $cmd
 					end
 				else
 					echo "$cmd is a $type"
@@ -63,7 +63,7 @@ function help --description 'Display help for any kind of command'
 				if man -w $cmd &> /dev/null
 					# $cmd is a program with a man page
 					set test (type -P test)
-					set cachefile ~/.cache/help.fish/$cmd
+					set cachefile ~/.cache/helpwith.fish/$cmd
 					set historyfile ~/.local/share/fish/fish_history
 					if $test $cachefile -nt (man -w $cmd)
 						cat $cachefile
@@ -99,5 +99,5 @@ function help --description 'Display help for any kind of command'
 end
 
 # TODO: add option completions
-complete -c help --erase
-complete -c help -fa '(complete -C "" | cut -f1 | uniq)'
+complete -c helpwith --erase
+complete -c helpwith -fa '(complete -C "" | cut -f1 | uniq)'
