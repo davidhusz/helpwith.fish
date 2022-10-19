@@ -112,6 +112,9 @@ function helpwith --description 'Display help for any kind of command'
 	else
 		definition $cmd
 	end
+	
+	# Erase inner functions so that they don't persist after `helpwith` was executed
+	functions --erase show runwithhistory definition savecache printcache
 end
 
 # TODO: add option completions
