@@ -20,7 +20,11 @@ function helpwith --description 'Display help for any kind of command'
 	function runwithhistory -V historyfile
 		printf -- '- cmd: %s\n  when: %s\n' "$argv" (date +%s) >> $historyfile
 		history merge
-		$argv
+		if not string match -qr ' ' $argv[1]
+			$argv
+		else
+			fish -c $argv[1]
+		end
 	end
 	
 	function definition
@@ -69,17 +73,17 @@ function helpwith --description 'Display help for any kind of command'
 				else
 					echo "$cmd is a $type"
 					if man -w $cmd.1 &> /dev/null
-						# $cmd is builtin, or pre-defined function
+						# $cmd is a builtin or pre-defined function
 						printcache ||
-							man $cmd.1 | grep -om1 "$cmd - .*\$" | savecache
+							man $cmd | grep -om1 "$cmd - .*\$" | savecache
 						if show man page
-							man $cmd.1
+							runwithhistory man $cmd
 						end
 					else
 						# $cmd is a user-defined function
 						echo $cmd - (type $cmd | sed -En '0,/--description/ s/^.*--description (.*)$/\1/p' | string unescape)
 						if show definition
-							definition $cmd
+							runwithhistory helpwith --definition $cmd
 						end
 					end
 				end
@@ -96,7 +100,7 @@ function helpwith --description 'Display help for any kind of command'
 				else
 					# $cmd is a program without a man page
 					if show help page
-						$cmd --help | less
+						runwithhistory "$cmd --help | less"
 					end
 				end
 			case '*'
