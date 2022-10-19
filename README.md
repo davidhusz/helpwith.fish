@@ -12,27 +12,35 @@ like a short summary or the full information.
 `helpwith.fish` provides a universal help command for the fish shell. Running
 `helpwith <command>` will give you the following output:
 
-	<command> is </path/to/bin | a function | an alias | ...>
-	<command> - <short description>
-	Show <man page | help page | definition>? [Enter/[q]uit]
+```
+<command> is </path/to/bin | a function | an alias | ...>
+<command> - <short description>
+Show <man page | help page | definition>? [Enter/[q]uit]
+```
 
 You can also get straight to viewing the definition of any function with the
 `-d/--definition` flag.
 
 ## Installation
 
-	cd ~/.config/fish/functions
-	wget https://raw.githubusercontent.com/davidhusz/helpwith.fish/main/helpwith.fish
+```sh
+cd ~/.config/fish/functions
+wget https://raw.githubusercontent.com/davidhusz/helpwith.fish/main/helpwith.fish
+```
 
 And if, like me, you feel like typing eight letters to call this function is
 simply asking too much:
 
-	echo 'abbr --add h helpwith' >> ~/.config/fish/config.fish
+```sh
+echo 'abbr --add h helpwith' >> ~/.config/fish/config.fish
+```
 
 ## Uninstallation
 
-	rm ~/.config/fish/functions/helpwith.fish
-	test -d ~/.cache/helpwith.fish && rm -r ~/.cache/helpwith.fish
+```sh
+rm ~/.config/fish/functions/helpwith.fish
+test -d ~/.cache/helpwith.fish && rm -r ~/.cache/helpwith.fish
+```
 
 The command summaries at the beginning of man pages are cached, hence the cache
 directory.
