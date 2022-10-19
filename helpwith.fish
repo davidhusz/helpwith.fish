@@ -70,7 +70,8 @@ function helpwith --description 'Display help for any kind of command'
 					echo "$cmd is a $type"
 					if man -w $cmd.1 &> /dev/null
 						# $cmd is builtin, or pre-defined function
-						man $cmd.1 | grep --color=never -om1 "$cmd - .*\$"
+						printcache ||
+							man $cmd.1 | grep -om1 "$cmd - .*\$" | savecache
 						if show man page
 							man $cmd.1
 						end
