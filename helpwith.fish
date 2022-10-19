@@ -27,20 +27,6 @@ function helpwith --description 'Display help for any kind of command'
 		end
 	end
 	
-	function definition
-		set source (functions -D $argv[1])
-		if command -q bat
-			set pager bat -l fish --pager 'less -R'
-		else
-			set pager less
-		end
-		if [ $source != '-' -a $source != stdin ]
-			$pager $source
-		else
-			type $argv[1] | tail -n +3 | $pager
-		end
-	end
-	
 	function savecache -V cachedir -V cachefile
 		mkdir -p $cachedir
 		tee $cachefile
@@ -115,11 +101,21 @@ function helpwith --description 'Display help for any kind of command'
 				end
 		end
 	else
-		definition $cmd
+		set source (functions -D $argv[1])
+		if command -q bat
+			set pager bat -l fish --pager 'less -R'
+		else
+			set pager less
+		end
+		if [ $source != '-' -a $source != stdin ]
+			$pager $source
+		else
+			type $argv[1] | tail -n +3 | $pager
+		end
 	end
 	
 	# Erase inner functions so that they don't persist after `helpwith` was executed
-	functions --erase show runwithhistory definition savecache printcache
+	functions --erase show runwithhistory savecache printcache
 end
 
 # TODO: add option completions
