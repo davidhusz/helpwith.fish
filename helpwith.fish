@@ -3,6 +3,9 @@ function helpwith --description 'Display help for any kind of command'
 	set cmd $argv[1]
 	set -q _flag_no_alias && set onlyfiles -f
 	set type (type -t $onlyfiles $cmd 2> /dev/null)
+	set cachedir ~/.cache/helpwith.fish
+	set cachefile $cachedir/$cmd
+	set historyfile ~/.local/share/fish/fish_history
 	
 	function show
 		set prompt "Show $argv? (Enter/[q]uit) "
@@ -14,9 +17,15 @@ function helpwith --description 'Display help for any kind of command'
 		test -z $reply
 	end
 	
+	function runwithhistory -V historyfile
+		printf -- '- cmd: %s\n  when: %s\n' "$argv" (date +%s) >> $historyfile
+		history merge
+		$argv
+	end
+	
 	function definition
 		set source (functions -D $argv[1])
-		if type -q bat
+		if command -q bat
 			set pager bat -l fish --pager 'less -R'
 		else
 			set pager less
@@ -25,6 +34,21 @@ function helpwith --description 'Display help for any kind of command'
 			$pager $source
 		else
 			type $argv[1] | tail -n +3 | $pager
+		end
+	end
+	
+	function savecache -V cachedir -V cachefile
+		mkdir -p $cachedir
+		tee $cachefile
+	end
+	
+	function printcache -V cmd -V cachefile
+		# fish's built-in test function can't do timestamp comparisons
+		set test (type -P test)
+		if $test $cachefile -nt (man -w $cmd)
+			cat $cachefile
+		else
+			return 1
 		end
 	end
 	
@@ -62,19 +86,11 @@ function helpwith --description 'Display help for any kind of command'
 				type $onlyfiles $cmd
 				if man -w $cmd &> /dev/null
 					# $cmd is a program with a man page
-					set test (type -P test)
-					set cachefile ~/.cache/helpwith.fish/$cmd
-					set historyfile ~/.local/share/fish/fish_history
-					if $test $cachefile -nt (man -w $cmd)
-						cat $cachefile
-					else
+					printcache ||
 						# HACK: why does `man jq > /dev/null` generate weird error messages?
-						man $cmd 2> /dev/null | grep -m1 "$cmd.* - " | string trim | tee $cachefile
-					end
+						man $cmd 2> /dev/null | grep -m1 "$cmd.* - " | string trim | savecache
 					if show man page
-						printf -- '- cmd: %s\n  when: %s\n' "man $cmd" (date +%s) >> $historyfile
-						history merge
-						man $cmd
+						runwithhistory man $cmd
 					end
 				else
 					# $cmd is a program without a man page
