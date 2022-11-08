@@ -51,7 +51,7 @@ function helpwith --description 'Display help for any kind of command'
 				if fish -c alias | string match -qr "alias $cmd (?<def>.*)\$" \
 						&& not set -q _flag_no_alias
 					echo "$cmd is an alias of $def"
-					if string match -qr "^.$cmd" $def \
+					if string match -qr "^'?$cmd " $def \
 							&& show "help for wrapped command '$cmd'"
 						echo ---
 						helpwith --no-alias $cmd
