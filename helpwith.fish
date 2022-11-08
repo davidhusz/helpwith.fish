@@ -94,6 +94,11 @@ function helpwith --description 'Display help for any kind of command'
 					# $cmd is an abbreviation
 					abbr --show | string match -qr -- "-- $cmd (?<def>.*)\$"
 					echo "$cmd is an abbreviation for $def"
+					if string match -qr '^\w+$' $def \
+							&& show "help for wrapped command '$def'"
+						echo ---
+						helpwith $def
+					end
 				else
 					# $cmd is an unknown command
 					echo "Could not find any information for $cmd" >&2
