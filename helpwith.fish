@@ -69,7 +69,7 @@ function helpwith --description 'Display help for any kind of command'
 						# $cmd is a user-defined function
 						echo $cmd - (type $cmd | sed -En '0,/--description/ s/^.*--description (.*)$/\1/p' | string unescape)
 						if show definition
-							runwithhistory helpwith --definition $cmd
+							runwithhistory helpwith -d $cmd
 						end
 					end
 				end
