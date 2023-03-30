@@ -23,7 +23,7 @@ function helpwith --description 'Display help for any kind of command'
 		if not string match -qr ' ' $argv[1]
 			$argv
 		else
-			fish -c $argv[1]
+			eval $argv[1]
 		end
 	end
 	
