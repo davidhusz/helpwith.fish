@@ -106,6 +106,13 @@ function helpwith --description 'Display help for any kind of command'
 				end
 		end
 	else
+		if ! type $cmd > /dev/null
+			return 1
+		end
+		if [ "$type" != function ]
+			echo "$cmd is not a function" >&2
+			return 1
+		end
 		if command -q bat
 			set source (type $cmd | sed -n 2p)
 			type $cmd | tail -n +3 | bat -l fish --pager 'less -RF' --file-name $source
