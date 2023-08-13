@@ -107,10 +107,10 @@ function helpwith --description 'Display help for any kind of command'
 		end
 	else
 		if command -q bat
-			set source (type $argv[1] | sed -n 2p)
-			type $argv[1] | tail -n +3 | bat -l fish --pager 'less -RF' --file-name $source
+			set source (type $cmd | sed -n 2p)
+			type $cmd | tail -n +3 | bat -l fish --pager 'less -RF' --file-name $source
 		else
-			type $argv[1]
+			type $cmd
 		end
 	end
 	
