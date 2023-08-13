@@ -106,16 +106,11 @@ function helpwith --description 'Display help for any kind of command'
 				end
 		end
 	else
-		set source (functions -D $argv[1])
 		if command -q bat
-			set pager bat -l fish --pager 'less -R'
+			set source (type $argv[1] | sed -n 2p)
+			type $argv[1] | tail -n +3 | bat -l fish --pager 'less -RF' --file-name $source
 		else
-			set pager less
-		end
-		if [ $source != '-' -a $source != stdin ]
-			$pager $source
-		else
-			type $argv[1] | tail -n +3 | $pager
+			type $argv[1]
 		end
 	end
 	
