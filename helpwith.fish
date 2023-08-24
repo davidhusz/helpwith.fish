@@ -79,7 +79,7 @@ function helpwith --description 'Display help for any kind of command'
 					# $cmd is a program with a man page
 					printcache ||
 						# HACK: why does `man jq > /dev/null` generate weird error messages?
-						man $cmd 2> /dev/null | grep -m1 "$cmd.* - " | string trim | savecache
+						man $cmd 2> /dev/null | grep -m1 "$cmd.* [-—] " | string trim | savecache
 					if show man page
 						runwithhistory man $cmd
 					end
