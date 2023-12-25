@@ -35,7 +35,7 @@ function helpwith --description 'Display help for any kind of command'
 	function printcache -V cmd -V cachefile
 		# fish's built-in test function can't do timestamp comparisons
 		set test (type -P test)
-		if $test $cachefile -nt (man -w $cmd)
+		if $test $cachefile -nt (man -w $cmd.1)
 			cat $cachefile
 		else
 			return 1
@@ -75,7 +75,7 @@ function helpwith --description 'Display help for any kind of command'
 				end
 			case file
 				type $onlyfiles $cmd
-				if man -w $cmd &> /dev/null
+				if man -w $cmd.1 &> /dev/null
 					# $cmd is a program with a man page
 					printcache ||
 						# HACK: why does `man jq | cat` generate weird error messages?
