@@ -126,5 +126,5 @@ function helpwith --description 'Display help for any kind of command'
 end
 
 complete -c helpwith --erase
-complete -c helpwith -fa '(complete -C "" | cut -f1 | uniq)'
+complete -c helpwith --no-files --arguments '(complete -C "" | cut -f1 | uniq)'
 complete -c helpwith --short-option d --long-option definition --description 'Show function definition'
