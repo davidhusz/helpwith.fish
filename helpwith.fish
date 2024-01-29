@@ -125,6 +125,6 @@ function helpwith --description 'Display help for any kind of command'
 	functions --erase show runwithhistory savecache printcache
 end
 
-# TODO: add option completions
 complete -c helpwith --erase
 complete -c helpwith -fa '(complete -C "" | cut -f1 | uniq)'
+complete -c helpwith --short-option d --long-option definition --description 'Show function definition'
